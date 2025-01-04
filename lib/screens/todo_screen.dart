@@ -1,29 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/providers/todo_provider.dart';
+import 'package:flutter_application_1/widgets/todo_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/todo_provider.dart';
 
 class TodoScreen extends ConsumerWidget {
+  TodoScreen({super.key});
+
+  final TextEditingController textController = TextEditingController();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Pass ref to NewWidget
-    return NewWidget(ref: ref);
-  }
-}
-
-class NewWidget extends StatelessWidget {
-  const NewWidget({
-    Key? key,  // Declare 'key' as a named parameter
-    required this.ref,
-  }) : super(key: key);  // Pass 'key' to the superclass constructor
-
-  final WidgetRef ref;
-
-  @override
-  Widget build(BuildContext context) {
     final todos = ref.watch(todoProvider);
     final todoNotifier = ref.read(todoProvider.notifier);
-
-    final TextEditingController textController = TextEditingController();
 
     return Scaffold(
       appBar: AppBar(
@@ -61,27 +49,8 @@ class NewWidget extends StatelessWidget {
               itemCount: todos.length,
               itemBuilder: (context, index) {
                 final todo = todos[index];
-                return ListTile(
-                  title: Text(
-                    todo.title,
-                    style: TextStyle(
-                      decoration: todo.isCompleted
-                          ? TextDecoration.lineThrough
-                          : TextDecoration.none,
-                    ),
-                  ),
-                  leading: Checkbox(
-                    value: todo.isCompleted,
-                    onChanged: (_) {
-                      todoNotifier.toggleTodo(todo.id);
-                    },
-                  ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    onPressed: () {
-                      todoNotifier.removeTodo(todo.id);
-                    },
-                  ),
+                return TodoItem(
+                  todo: todo,
                 );
               },
             ),

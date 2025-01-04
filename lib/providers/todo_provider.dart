@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../models/todo.dart';
 
 class TodoNotifier extends StateNotifier<List<Todo>> {
@@ -9,7 +10,7 @@ class TodoNotifier extends StateNotifier<List<Todo>> {
       id: DateTime.now().toString(),
       title: title,
     );
-    state = [...state, newTodo];
+    state = [newTodo, ...state];
   }
 
   void removeTodo(String id) {
